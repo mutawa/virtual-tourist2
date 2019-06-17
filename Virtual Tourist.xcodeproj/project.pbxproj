@@ -59,6 +59,7 @@
 		E0DA72C422B822ED009A9C89 /* Virtual Tourist */ = {
 			isa = PBXGroup;
 			children = (
+				E0DA72D122B822EE009A9C89 /* Info.plist */,
 				E0DA72D722B82313009A9C89 /* Model */,
 				E0DA72D822B8231A009A9C89 /* View */,
 				E0DA72D922B82321009A9C89 /* Controller */,
@@ -97,7 +98,6 @@
 				E0DA72C522B822ED009A9C89 /* AppDelegate.swift */,
 				E0DA72CC22B822EE009A9C89 /* Assets.xcassets */,
 				E0DA72CE22B822EE009A9C89 /* LaunchScreen.storyboard */,
-				E0DA72D122B822EE009A9C89 /* Info.plist */,
 			);
 			path = "Supporting Files";
 			sourceTree = "<group>";
