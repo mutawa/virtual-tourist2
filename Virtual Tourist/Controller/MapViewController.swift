@@ -24,34 +24,75 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
     }
     
-    @objc func mapTapped(sender:Any) {
-        if let gr = sender as? UILongPressGestureRecognizer {
-            let location = gr.location(in: mapView)
+    @objc func mapTapped(sender : UILongPressGestureRecognizer) {
+        if sender.state == .began {
+            let location = sender.location(in: mapView)
             let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
             
-            API.shared.get(location: coordinate) { data in
-                let decoder = JSONDecoder()
-                let sData = data.subdata(in: 14..<data.count-1)
-                
-                do {
-                    
-                    
-                    let result = try decoder.decode(FlickerResponse.self, from: sData)
-                    
-                    print(result.photos.photo.count)
+            
+            let annotation = FlickrAnnotation(withCoordinate: coordinate, title: "loading...", subtitle: nil)
+            
 
-                    
-                    
-                } catch {
-                    let str = String(data: sData, encoding: .utf8)!
-                    print(str)
-                    print(error.localizedDescription)
-                }
-                
+            mapView.addAnnotation(annotation)
+            FlickrAPI.shared.select(location: coordinate) { result in
+                print("got result count \(result.photo.count)")
+                annotation.setCount(result.photo.count)
+                self.mapView.removeAnnotation(annotation)
+                self.mapView.addAnnotation(annotation)
                 
             }
         }
         
     }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        guard annotation is FlickrAnnotation else { return nil }
+        
+        let a = annotation as! FlickrAnnotation
+        
+        let identifier = "pin"
+        
+        var pin = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        
+        if pin == nil {
+            pin = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        }
+        let marker = pin as! MKMarkerAnnotationView
+        
+            if a.cnt<0 {
+                a.title = "loading..."
+                marker.markerTintColor = .orange
+                
+            } else if a.cnt == 0 {
+              a.title = "no photos"
+                marker.markerTintColor = .gray
+            } else {
+                a.title = "\(a.cnt) photos"
+                marker.markerTintColor = .red
+            }
+        
+        return marker
+        
+    }
+}
+
+class FlickrAnnotation:NSObject, MKAnnotation {
+    var coordinate: CLLocationCoordinate2D
+    var title: String?
+    var subtitle: String?
+    var cnt:Int = -1
+    
+    init(withCoordinate: CLLocationCoordinate2D, title: String?, subtitle: String? ) {
+        self.coordinate = withCoordinate
+        self.title = title
+        self.subtitle = subtitle
+    }
+    func setCount(_ count:Int) {
+        self.cnt = count
+        
+    }
+   
+    
+    
 }
 

@@ -11,7 +11,7 @@
 		E0DA72CB22B822ED009A9C89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72C922B822ED009A9C89 /* Main.storyboard */; };
 		E0DA72CD22B822EE009A9C89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72CC22B822EE009A9C89 /* Assets.xcassets */; };
 		E0DA72D022B822EE009A9C89 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72CE22B822EE009A9C89 /* LaunchScreen.storyboard */; };
-		E0DA72DC22B8239D009A9C89 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72DB22B8239D009A9C89 /* API.swift */; };
+		E0DA72DC22B8239D009A9C89 /* FlickrAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72DB22B8239D009A9C89 /* FlickrAPI.swift */; };
 		E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72DD22B82489009A9C89 /* MapViewController.swift */; };
 		E0DA72E022B8251B009A9C89 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */; };
 		E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */; };
@@ -24,7 +24,7 @@
 		E0DA72CC22B822EE009A9C89 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E0DA72CF22B822EE009A9C89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E0DA72D122B822EE009A9C89 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E0DA72DB22B8239D009A9C89 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
+		E0DA72DB22B8239D009A9C89 /* FlickrAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPI.swift; sourceTree = "<group>"; };
 		E0DA72DD22B82489009A9C89 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerPhoto.swift; sourceTree = "<group>"; };
@@ -89,7 +89,7 @@
 		E0DA72D922B82321009A9C89 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				E0DA72DB22B8239D009A9C89 /* API.swift */,
+				E0DA72DB22B8239D009A9C89 /* FlickrAPI.swift */,
 				E0DA72DD22B82489009A9C89 /* MapViewController.swift */,
 			);
 			path = Controller;
@@ -177,7 +177,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E0DA72DC22B8239D009A9C89 /* API.swift in Sources */,
+				E0DA72DC22B8239D009A9C89 /* FlickrAPI.swift in Sources */,
 				E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */,
 				E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */,
 				E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */,
