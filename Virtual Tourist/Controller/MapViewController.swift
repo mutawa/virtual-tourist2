@@ -85,6 +85,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         var pin = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
         
+        
         if pin == nil {
             pin = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
         }
@@ -102,7 +103,16 @@ class MapViewController : UIViewController, MKMapViewDelegate {
                 marker.markerTintColor = .red
             }
         
+        marker.canShowCallout = true
+        marker.rightCalloutAccessoryView = UIButton(type: .infoDark)
+       
+        
+        
         return marker
+        
+    }
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        print("you tapped me")
         
     }
     
@@ -111,6 +121,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         annotation.setCount(Int(pin.photosCount))
         annotation.cnt = Int(pin.photosCount)
+        
         print("this count is \(pin.photosCount)")
         
         
