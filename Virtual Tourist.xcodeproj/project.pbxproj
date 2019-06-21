@@ -16,6 +16,7 @@
 		E0DA72E022B8251B009A9C89 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */; };
 		E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */; };
 		E0DA72E522BD4187009A9C89 /* FlickrModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72E322BD4187009A9C89 /* FlickrModel.xcdatamodeld */; };
+		E0DA72E722BD445E009A9C89 /* DataController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72E622BD445E009A9C89 /* DataController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -30,6 +31,7 @@
 		E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerPhoto.swift; sourceTree = "<group>"; };
 		E0DA72E422BD4187009A9C89 /* FlickrModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = FlickrModel.xcdatamodel; sourceTree = "<group>"; };
+		E0DA72E622BD445E009A9C89 /* DataController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,6 +79,7 @@
 			children = (
 				E0DA72E322BD4187009A9C89 /* FlickrModel.xcdatamodeld */,
 				E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */,
+				E0DA72E622BD445E009A9C89 /* DataController.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -181,6 +184,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E0DA72E522BD4187009A9C89 /* FlickrModel.xcdatamodeld in Sources */,
+				E0DA72E722BD445E009A9C89 /* DataController.swift in Sources */,
 				E0DA72DC22B8239D009A9C89 /* FlickrAPI.swift in Sources */,
 				E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */,
 				E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */,

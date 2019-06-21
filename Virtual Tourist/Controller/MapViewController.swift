@@ -12,6 +12,7 @@ import MapKit
 class MapViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private var mapView:MKMapView!
     
+    var dataController:DataController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         let tgr = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
         mapView.addGestureRecognizer(tgr)
+        
         
         
         

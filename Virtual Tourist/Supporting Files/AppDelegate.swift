@@ -12,10 +12,17 @@ import UIKit
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
+    let dataController = DataController(modelName: "FlickrModel")
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
-        // Override point for customization after application launch.
+
+        dataController.load ()
+        let nvc = window?.rootViewController as! UINavigationController
+        let mvc = nvc.topViewController as! MapViewController
+        mvc.dataController = dataController
+        
+        
         return true
     }
 
