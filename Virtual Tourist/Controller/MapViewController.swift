@@ -8,11 +8,14 @@
 
 import UIKit
 import MapKit
+import CoreData
+
 
 class MapViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private var mapView:MKMapView!
     
     var dataController:DataController!
+    var pins:[Pin] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -20,6 +23,20 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         let tgr = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
         mapView.addGestureRecognizer(tgr)
+        
+        let fr:NSFetchRequest<Pin> = Pin.fetchRequest()
+        let sd = NSSortDescriptor(key: "title", ascending: false)
+        fr.sortDescriptors = [sd]
+        do {
+            pins = try dataController.context.fetch(fr)
+            for pin in pins {
+                addPinToMap(pin: pin)
+                
+            }
+        }
+        catch {
+            print("error fetching pins")
+        }
         
         
         
@@ -33,12 +50,24 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             
             
             let annotation = FlickrAnnotation(withCoordinate: coordinate, title: "loading...", subtitle: nil)
+            let cdpin = Pin(context: dataController.context)
+            cdpin.latitude = coordinate.latitude
+            cdpin.longitude = coordinate.longitude
+            
             
 
             mapView.addAnnotation(annotation)
             FlickrAPI.shared.select(location: coordinate) { result in
                 print("got result count \(result.photo.count)")
                 annotation.setCount(result.photo.count)
+                cdpin.title = "\(result.photo.count) photos"
+                
+                cdpin.photosCount = Int64(result.photo.count)
+                print("setting count to \(cdpin.photosCount)")
+
+                
+                try? self.dataController.context.save()
+                
                 self.mapView.removeAnnotation(annotation)
                 self.mapView.addAnnotation(annotation)
                 
@@ -75,6 +104,17 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         return marker
         
+    }
+    
+    func addPinToMap(pin:Pin) {
+        let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: pin.title, subtitle: nil)
+        
+        annotation.setCount(Int(pin.photosCount))
+        annotation.cnt = Int(pin.photosCount)
+        print("this count is \(pin.photosCount)")
+        
+        
+        mapView.addAnnotation(annotation)
     }
 }
 
