@@ -14,6 +14,7 @@
 		E0DA72DC22B8239D009A9C89 /* API.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72DB22B8239D009A9C89 /* API.swift */; };
 		E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72DD22B82489009A9C89 /* MapViewController.swift */; };
 		E0DA72E022B8251B009A9C89 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */; };
+		E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -26,6 +27,7 @@
 		E0DA72DB22B8239D009A9C89 /* API.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = API.swift; sourceTree = "<group>"; };
 		E0DA72DD22B82489009A9C89 /* MapViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapViewController.swift; sourceTree = "<group>"; };
 		E0DA72DF22B8251B009A9C89 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickerPhoto.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +73,7 @@
 		E0DA72D722B82313009A9C89 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -177,6 +180,7 @@
 				E0DA72DC22B8239D009A9C89 /* API.swift in Sources */,
 				E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */,
 				E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */,
+				E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
