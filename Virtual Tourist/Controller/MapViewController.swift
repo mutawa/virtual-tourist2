@@ -29,10 +29,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         fr.sortDescriptors = [sd]
         do {
             pins = try dataController.context.fetch(fr)
-            for pin in pins {
-                addPinToMap(pin: pin)
-                
-            }
+            self.loadPins()
         }
         catch {
             print("error fetching pins")
@@ -116,16 +113,18 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
     }
     
-    func addPinToMap(pin:Pin) {
-        let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: pin.title, subtitle: nil)
-        
-        annotation.setCount(Int(pin.photosCount))
-        annotation.cnt = Int(pin.photosCount)
-        
-        print("this count is \(pin.photosCount)")
-        
-        
-        mapView.addAnnotation(annotation)
+    func loadPins() {
+        for pin in self.pins {
+            let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: pin.title, subtitle: nil)
+            
+            annotation.setCount(Int(pin.photosCount))
+            annotation.cnt = Int(pin.photosCount)
+            
+            print("this count is \(pin.photosCount)")
+            
+            
+            mapView.addAnnotation(annotation)
+        }
     }
 }
 
