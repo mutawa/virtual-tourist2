@@ -54,8 +54,32 @@ class FlickrAPI {
             
         }.resume()
         
+    }
+    
+    public func loadImage(from photo:Photo, completionHandler: ((Data?)->())? = nil) {
+        //guard let farm = photo.farm else { return }
+        //guard let secret = photo.secret else { return }
+        guard let id = photo.id else { return  }
+        guard let server = photo.server else { return }
         
+        var urlString = "https://farm\(photo.farm).staticflickr.com/\(server)/\(id)"
+        if photo.secret != nil {
+            urlString += "_\(photo.secret!)"
+        }
+        urlString += ".jpg"
         
+        urlString = "https://farm66.staticflickr.com/65535/33995376388_2684b7d141.jpg"
+        
+        URLSession.shared.dataTask(with: URL(string: urlString)!) { imgdata, resp, err in
+            guard err == nil else { print("\(err!.localizedDescription)"); return }
+            
+            print(urlString)
+            if let data = imgdata {
+                print(data.count)
+                completionHandler?(data)
+            }
+            
+        }.resume()
         
     }
     

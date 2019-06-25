@@ -6,15 +6,20 @@
 //  Copyright © 2019 Ahmad Apps. All rights reserved.
 //
 
-import Foundation
+import UIKit
 
 struct FlickrPhoto:Codable {
     let id:String
     let server:String
     let farm:Int
+    let secret:String
+    
+    
+    
+    
     
     enum CodingKeys: String, CodingKey {
-        case id, server, farm
+        case id, server, farm, secret
     }
 }
 
