@@ -10,9 +10,23 @@ import UIKit
 
 class FlickrCollectionViewCell:UICollectionViewCell {
     @IBOutlet weak var imageView:UIImageView!
-    var image:UIImage? {
-        didSet {
-            imageView.image = image
+    var photo:Photo! {
+        didSet{
+            configureUI()
+        }
+    }
+    
+    func configureUI() {
+        if photo.data == nil {
+            photo.load { [weak self] data in
+                self?.photo.data = data
+                try? self?.photo.managedObjectContext?.save()
+                DispatchQueue.main.async {
+                    self?.imageView.image = self?.photo.image!
+                }
+            }
+        } else {
+            self.imageView.image = photo.image
         }
     }
     

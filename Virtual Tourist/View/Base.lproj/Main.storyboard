@@ -48,15 +48,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4f-vS-Jmo">
-                                <rect key="frame" x="20" y="64" width="280" height="30"/>
-                                <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Delete this pin">
-                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                                </state>
-                            </button>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Xng-Ne-C9H">
-                                <rect key="frame" x="20" y="102" width="280" height="358"/>
+                                <rect key="frame" x="20" y="134" width="280" height="326"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="o8k-iV-7gP">
                                     <size key="itemSize" width="110" height="107"/>
@@ -72,7 +65,7 @@
                                             <rect key="frame" x="0.0" y="0.0" width="110" height="107"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="y9n-yS-7Cz">
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="imagePlaceholder" translatesAutoresizingMaskIntoConstraints="NO" id="y9n-yS-7Cz">
                                                     <rect key="frame" x="2" y="2" width="106" height="103"/>
                                                 </imageView>
                                             </subviews>
@@ -93,19 +86,39 @@
                                     <outlet property="delegate" destination="hRk-SQ-Oiv" id="bpa-Aj-4bW"/>
                                 </connections>
                             </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="center" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="No photos in this location" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="1pd-zP-qOz">
+                                <rect key="frame" x="40" y="164" width="240" height="216"/>
+                                <fontDescription key="fontDescription" type="boldSystem" pointSize="35"/>
+                                <color key="textColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z4f-vS-Jmo">
+                                <rect key="frame" x="20" y="84" width="280" height="30"/>
+                                <color key="backgroundColor" red="1" green="0.14913141730000001" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" title="Delete this pin">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                </state>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="top" secondItem="z4f-vS-Jmo" secondAttribute="bottom" constant="-30" id="7CB-dL-PPc"/>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="Xng-Ne-C9H" secondAttribute="trailing" constant="20" id="SXR-6A-1DA"/>
-                            <constraint firstItem="z4f-vS-Jmo" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="20" id="mxy-XP-v6Z"/>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="z4f-vS-Jmo" secondAttribute="trailing" constant="20" id="nb8-4Q-ViS"/>
-                            <constraint firstItem="Xng-Ne-C9H" firstAttribute="top" secondItem="z4f-vS-Jmo" secondAttribute="bottom" constant="8" id="ocy-Gs-NN1"/>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="Xng-Ne-C9H" secondAttribute="bottom" constant="20" id="vmf-T9-c9X"/>
-                            <constraint firstItem="Xng-Ne-C9H" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="20" id="xVg-Vs-SRm"/>
+                            <constraint firstItem="Xng-Ne-C9H" firstAttribute="top" secondItem="z4f-vS-Jmo" secondAttribute="bottom" constant="20" id="LsY-fE-9QK"/>
+                            <constraint firstItem="1pd-zP-qOz" firstAttribute="top" secondItem="tAm-RB-nHa" secondAttribute="top" constant="100" id="O2c-TC-6ht"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="1pd-zP-qOz" secondAttribute="bottom" constant="100" id="T9s-mJ-aVd"/>
+                            <constraint firstItem="z4f-vS-Jmo" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="20" id="TpR-Bq-pqy"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="Xng-Ne-C9H" secondAttribute="bottom" constant="20" id="ZLQ-dG-AYv"/>
+                            <constraint firstItem="1pd-zP-qOz" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="40" id="bGu-Lh-If1"/>
+                            <constraint firstItem="Xng-Ne-C9H" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="20" id="cWJ-f2-DAc"/>
+                            <constraint firstItem="z4f-vS-Jmo" firstAttribute="top" secondItem="tAm-RB-nHa" secondAttribute="top" constant="20" id="cfE-ex-7OU"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="Xng-Ne-C9H" secondAttribute="trailing" constant="20" id="iVH-tF-245"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="z4f-vS-Jmo" secondAttribute="trailing" constant="20" id="kcP-Lq-AHc"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="1pd-zP-qOz" secondAttribute="trailing" constant="40" id="xCw-ft-eWG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="tAm-RB-nHa"/>
                     </view>
+                    <connections>
+                        <outlet property="noPhotosLabel" destination="1pd-zP-qOz" id="0fX-y3-dKV"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="jQe-Kw-uV9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
@@ -130,4 +143,7 @@
             <point key="canvasLocation" x="95.652173913043484" y="110.49107142857143"/>
         </scene>
     </scenes>
+    <resources>
+        <image name="imagePlaceholder" width="128" height="128"/>
+    </resources>
 </document>

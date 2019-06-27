@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Model/Photo+Extra.swift"
-            timestampString = "583166161.9980969"
+            timestampString = "583303617.317131"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "17"
-            endingLineNumber = "17"
-            landmarkName = "load()"
+            startingLineNumber = "29"
+            endingLineNumber = "29"
+            landmarkName = "load(completionHandler:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Controller/FlickrAPI.swift"
-            timestampString = "583166161.998211"
+            timestampString = "583303617.31723"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "61"
@@ -42,12 +42,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Model/Photo+Extra.swift"
-            timestampString = "583166161.9988461"
+            timestampString = "583303617.31731"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "16"
-            endingLineNumber = "16"
-            landmarkName = "load()"
+            startingLineNumber = "28"
+            endingLineNumber = "28"
+            landmarkName = "load(completionHandler:)"
             landmarkType = "7">
             <Locations>
                <Location
@@ -90,7 +90,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Controller/FlickrAPI.swift"
-            timestampString = "583166161.99893"
+            timestampString = "583303617.317384"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "42"
@@ -138,13 +138,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Controller/FlickrAPI.swift"
-            timestampString = "583166161.999507"
+            timestampString = "583303617.317458"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "80"
-            endingLineNumber = "80"
-            landmarkName = "loadImage(from:completionHandler:)"
-            landmarkType = "7">
+            startingLineNumber = "73"
+            endingLineNumber = "73">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -182,17 +180,17 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Controller/FlickrAPI.swift"
-            timestampString = "583166161.999928"
+            timestampString = "583303617.31753"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "79"
-            endingLineNumber = "79"
-            landmarkName = "loadImage(from:completionHandler:)"
-            landmarkType = "7">
+            startingLineNumber = "72"
+            endingLineNumber = "72"
+            landmarkName = "FlickrAPI"
+            landmarkType = "3">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

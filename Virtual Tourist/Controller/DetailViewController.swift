@@ -11,33 +11,20 @@ import UIKit
 class DetailViewController:UIViewController , UICollectionViewDelegate, UICollectionViewDataSource {
     var photos = [Photo]()
     
-    override func viewWillAppear(_ animated: Bool) {
-        
-        for p in photos {
-            if p.data==nil { print("loading photo...");  p.load() }
-        }
-        
-        do {
-            if let ctx = photos[0].pin?.managedObjectContext {
-                if ctx.hasChanges {
-                    print("saving changes")
-                    try ctx.save()
-                    print("saved")
-                } else {
-                    print("no changes to save")
-                }
-            }
-            
-        } catch { print("failed to save") }
-    }
     
+    @IBOutlet weak var noPhotosLabel: UILabel!
+    override func viewWillAppear(_ animated: Bool) {
+        noPhotosLabel.isHidden = photos.count > 0
+        
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 1
+        return photos.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "cell", for: indexPath) as! FlickrCollectionViewCell
-        cell.image = photos[indexPath.item].image
+        
+        cell.photo = photos[indexPath.item]
         
         return cell
     }
