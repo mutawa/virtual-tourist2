@@ -17,6 +17,8 @@ class FlickrCollectionViewCell:UICollectionViewCell {
     }
     
     func configureUI() {
+        
+        self.imageView.image = UIImage(named: "imagePlaceholder")
         if photo.data == nil {
             photo.load { [weak self] data in
                 self?.photo.data = data
@@ -28,6 +30,13 @@ class FlickrCollectionViewCell:UICollectionViewCell {
         } else {
             self.imageView.image = photo.image
         }
+        self.layer.cornerRadius = 20
+        self.layer.masksToBounds = true
+        self.layer.borderWidth = 1.5
+        self.imageView.contentMode = .scaleAspectFill
+        
+        
     }
+    
     
 }

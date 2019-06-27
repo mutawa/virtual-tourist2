@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E08043B622C4BC4500D0F81D /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08043B522C4BC4500D0F81D /* ImageViewController.swift */; };
 		E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72C522B822ED009A9C89 /* AppDelegate.swift */; };
 		E0DA72CB22B822ED009A9C89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72C922B822ED009A9C89 /* Main.storyboard */; };
 		E0DA72CD22B822EE009A9C89 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72CC22B822EE009A9C89 /* Assets.xcassets */; };
@@ -24,6 +25,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E08043B522C4BC4500D0F81D /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		E0DA72C222B822ED009A9C89 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DA72C522B822ED009A9C89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		E0DA72CA22B822ED009A9C89 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
@@ -105,6 +107,7 @@
 		E0DA72D922B82321009A9C89 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				E08043B522C4BC4500D0F81D /* ImageViewController.swift */,
 				E0E6C7E922C2496200EC03F0 /* DetailViewController.swift */,
 				E0E6C7EB22C24A1100EC03F0 /* FlickrCollectionViewCell.swift */,
 				E0DA72DB22B8239D009A9C89 /* FlickrAPI.swift */,
@@ -204,6 +207,7 @@
 				E0DA72E922BD514E009A9C89 /* Pin+Extra.swift in Sources */,
 				E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */,
 				E0E6C7EC22C24A1100EC03F0 /* FlickrCollectionViewCell.swift in Sources */,
+				E08043B622C4BC4500D0F81D /* ImageViewController.swift in Sources */,
 				E0E6C7EA22C2496200EC03F0 /* DetailViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

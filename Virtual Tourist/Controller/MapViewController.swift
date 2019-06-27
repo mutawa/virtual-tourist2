@@ -17,6 +17,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     var dataController:DataController!
     var pins:[Pin] = []
     
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -56,7 +58,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             mapView.addAnnotation(annotation)
             FlickrAPI.shared.select(location: coordinate) { result in
                 print("got result count \(result.photo.count)")
-                let totalPhotos = Int(result.total) ?? 0
+                let totalPhotos = min(50, Int(result.total) ?? 0)
+                
                 
                 annotation.setCount(totalPhotos)
                 cdpin.title = "\(totalPhotos) photos"
@@ -109,7 +112,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
               a.title = "no photos"
                 marker.markerTintColor = .gray
             } else {
-                a.title = "\(a.cnt) photos"
+                var countString = "\(a.cnt) photo"
+                
+                
+                if a.cnt>1 {
+                    countString += "s"
+                }
+                
+                a.title = countString
                 marker.markerTintColor = .red
             }
         
@@ -124,11 +134,12 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // move to detail view controller
         let flickrAnnotation = view.annotation as! FlickrAnnotation
-        let pin = flickrAnnotation.pin
-        print("we have a \(pin.photosCount) images")
-        let ph = pin.photos!.allObjects as! [Photo]
         
-        performSegue(withIdentifier: "details", sender: ph)
+        
+        
+        
+        
+        performSegue(withIdentifier: "details", sender: flickrAnnotation)
         
         
         
@@ -137,9 +148,17 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let dvc = segue.destination as! DetailViewController
-        dvc.photos = sender as! [Photo]
+        let annotation = sender as? FlickrAnnotation
+        dvc.pin = annotation?.pin
+        dvc.deletePinAction = { [weak self] in
+            self?.mapView.removeAnnotation(annotation!)
+            
+        }
+        
+        
         
     }
+
     
     func loadPins() {
         for pin in self.pins {
@@ -148,7 +167,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             annotation.setCount(Int(pin.photosCount))
             annotation.cnt = Int(pin.photosCount)
             
-            print("this count is \(pin.photosCount)")
+            
             
             
             mapView.addAnnotation(annotation)

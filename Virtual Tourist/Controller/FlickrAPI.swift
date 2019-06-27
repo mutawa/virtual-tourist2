@@ -21,7 +21,7 @@ class FlickrAPI {
             + "method=flickr.photos.search"
             + "&api_key=\(key)"
             + "&format=json"
-            + "&per_page=4"
+            + "&per_page=50"
         
     }
     public static let shared = FlickrAPI()
