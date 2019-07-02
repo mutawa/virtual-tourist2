@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		E004E68322CB2C1500CF0846 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E004E68222CB2C1500CF0846 /* Constants.swift */; };
+		E004E68522CB38F500CF0846 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = E004E68422CB38F500CF0846 /* Utils.swift */; };
 		E08043B622C4BC4500D0F81D /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08043B522C4BC4500D0F81D /* ImageViewController.swift */; };
 		E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72C522B822ED009A9C89 /* AppDelegate.swift */; };
 		E0DA72CB22B822ED009A9C89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72C922B822ED009A9C89 /* Main.storyboard */; };
@@ -27,6 +28,7 @@
 
 /* Begin PBXFileReference section */
 		E004E68222CB2C1500CF0846 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		E004E68422CB38F500CF0846 /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		E08043B522C4BC4500D0F81D /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		E0DA72C222B822ED009A9C89 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DA72C522B822ED009A9C89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -95,6 +97,7 @@
 				E0DA72E322BD4187009A9C89 /* FlickrModel.xcdatamodeld */,
 				E0DA72E122B96EF9009A9C89 /* FlickerPhoto.swift */,
 				E0DA72E622BD445E009A9C89 /* DataController.swift */,
+				E004E68422CB38F500CF0846 /* Utils.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -206,6 +209,7 @@
 				E0DA72DC22B8239D009A9C89 /* FlickrAPI.swift in Sources */,
 				E0E6C7EE22C253F300EC03F0 /* Photo+Extra.swift in Sources */,
 				E0DA72DE22B82489009A9C89 /* MapViewController.swift in Sources */,
+				E004E68522CB38F500CF0846 /* Utils.swift in Sources */,
 				E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */,
 				E0DA72E922BD514E009A9C89 /* Pin+Extra.swift in Sources */,
 				E0DA72E222B96EF9009A9C89 /* FlickerPhoto.swift in Sources */,

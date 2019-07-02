@@ -84,9 +84,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             
             
             
-            mapView.addAnnotation(annotation)
-            FlickrAPI.shared.select(location: coordinate) { result in
-                print("got result count \(result.photo.count)")
+            
+            FlickrAPI.shared.select(location: coordinate) { result,errorMessage in
+                guard let result = result else {
+                    
+                    self.alert(title: "Can't select location", message: errorMessage ?? "--")
+                    return }
+                
+                self.mapView.addAnnotation(annotation)
                 let totalPhotos = min(50, Int(result.total) ?? 0)
                 
                 
@@ -221,8 +226,4 @@ class FlickrAnnotation:NSObject, MKAnnotation {
         self.cnt = count
         
     }
-    
-    
-    
 }
-

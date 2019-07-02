@@ -18,21 +18,29 @@ class FlickrAPI {
     private static var baseUrl:String {
         return
             "https://api.flickr.com/services/rest?"
-            + "method=flickr.photos.search"
-            + "&api_key=\(key)"
-            + "&format=json"
-            + "&per_page=50"
+                + "method=flickr.photos.search"
+                + "&api_key=\(key)"
+                + "&format=json"
+                + "&per_page=50"
         
     }
     public static let shared = FlickrAPI()
     
     private init() {}
     
-    public func select(location:CLLocationCoordinate2D, completionHandler: ((FlickrResult)->Void)?=nil) {
+    public func select(location:CLLocationCoordinate2D, completionHandler: ((FlickrResult?,String?)->Void)?=nil) {
         
         URLSession.shared.dataTask(with: URL(string: FlickrAPI.baseUrl + "&lon=\(location.longitude)&lat=\(location.latitude)")!) { data, resp, err in
-            guard err == nil else { print("Error: \(err?.localizedDescription ?? "some error")"); return }
-            guard let data=data else { print("No Data"); return }
+            guard err == nil else {
+                completionHandler?(nil,err?.localizedDescription)
+                return
+                
+            }
+            guard let data=data else {
+                completionHandler?(nil,"No data retrieved from API")
+                return
+                
+            }
             let decoder = JSONDecoder()
             let sData = data.subdata(in: 14..<data.count-1)
             
@@ -40,39 +48,39 @@ class FlickrAPI {
                 
                 let reply = try decoder.decode(FlickrResponse.self, from: sData)
                 DispatchQueue.main.async {
-                    completionHandler?(reply.result)
+                    completionHandler?(reply.result,nil)
                 }
                 
                 
-
+                
             } catch {
-                let str = String(data: sData, encoding: .utf8)!
-                print(str)
-                print(error.localizedDescription)
+                
+                completionHandler?(nil,"Error while trying to parse recieved data. \(err?.localizedDescription ?? "")")
             }
             
             
-        }.resume()
+            }.resume()
         
     }
     
-    public func loadImage(from urlString:String?, completionHandler: ((Data?)->())? = nil) {
-        //guard let farm = photo.farm else { return }
-        //guard let secret = photo.secret else { return }
+    public func loadImage(from urlString:String?, completionHandler: ((Data?,String?)->())? = nil) {
+        
         guard let urlString = urlString else { return }
         
-        //urlString = "https://farm66.staticflickr.com/65535/33995376388_2684b7d141.jpg"
         
         URLSession.shared.dataTask(with: URL(string: urlString)!) { imgdata, resp, err in
-            guard err == nil else { print("\(err!.localizedDescription)"); return }
-            
-            print(urlString)
-            if let data = imgdata {
-                print(data.count)
-                completionHandler?(data)
+            guard err == nil else {
+                completionHandler?(nil,err?.localizedDescription)
+                return
+                
             }
             
-        }.resume()
+            if let data = imgdata {
+                
+                completionHandler?(data,nil)
+            }
+            
+            }.resume()
         
     }
     

@@ -13,7 +13,7 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     var photos = [[Photo]]()
     var pin:Pin!
     var deletePinAction : (()->())?
-    
+    var didDisplayErrorMessageOnce = false
     
     @IBOutlet weak var loadMoreButton: UIButton!
     @IBOutlet weak var collectionView:UICollectionView!
@@ -29,6 +29,7 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         layout.minimumInteritemSpacing = 10
         
         allPhotos = pin.photos?.allObjects as! [Photo]
+        FlickrCollectionViewCell.delegate = self
         
         addSection()
         
@@ -40,6 +41,11 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         
         
     }
+    
+    deinit {
+        FlickrCollectionViewCell.delegate = nil
+    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -136,4 +142,16 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         
     }
     
+}
+
+extension DetailViewController:FlickrCollectionViewCellDelegate {
+    func cellLoadErrorOccured(errorMessage: String) {
+        if !didDisplayErrorMessageOnce {
+            self.alert(title: "Could not load image", message: errorMessage)
+            didDisplayErrorMessageOnce = true
+        }
+        
+    }
+    
+  
 }

@@ -8,7 +8,15 @@
 
 import UIKit
 
+
+protocol FlickrCollectionViewCellDelegate : class {
+    func cellLoadErrorOccured(errorMessage:String)
+}
+
+
 class FlickrCollectionViewCell:UICollectionViewCell {
+    static weak var delegate : FlickrCollectionViewCellDelegate?
+    
     @IBOutlet weak var imageView:UIImageView!
     var photo:Photo! {
         didSet{
@@ -20,7 +28,12 @@ class FlickrCollectionViewCell:UICollectionViewCell {
         
         self.imageView.image = UIImage(named: "imagePlaceholder")
         if photo.data == nil {
-            photo.load { [weak self] data in
+            photo.load { [weak self] data,errorMessage in
+                guard errorMessage == nil else {
+                    FlickrCollectionViewCell.delegate?.cellLoadErrorOccured(errorMessage: errorMessage!)
+                    return
+                }
+                
                 self?.photo.data = data
                 try? self?.photo.managedObjectContext?.save()
                 DispatchQueue.main.async {

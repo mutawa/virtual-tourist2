@@ -22,11 +22,11 @@ extension Photo {
         return urlString
     }
     
-    func load(completionHandler:@escaping (Data?)->()) {
+    func load(completionHandler:@escaping (Data?,String?)->()) {
         
         
-        FlickrAPI.shared.loadImage(from: url) { data in
-                completionHandler(data)
+        FlickrAPI.shared.loadImage(from: url) { data,errorMessage in
+                completionHandler(data,errorMessage)
             
         }
             
