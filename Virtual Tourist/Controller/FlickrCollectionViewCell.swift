@@ -11,6 +11,9 @@ import UIKit
 
 protocol FlickrCollectionViewCellDelegate : class {
     func cellLoadErrorOccured(errorMessage:String)
+    func didStartDownloadingFromAPI()
+    func didFinishDownloadingFromAPI()
+    
 }
 
 
@@ -28,14 +31,18 @@ class FlickrCollectionViewCell:UICollectionViewCell {
         
         self.imageView.image = UIImage(named: "imagePlaceholder")
         if photo.data == nil {
+            FlickrCollectionViewCell.delegate?.didStartDownloadingFromAPI()
+            
             photo.load { [weak self] data,errorMessage in
                 guard errorMessage == nil else {
+                    FlickrCollectionViewCell.delegate?.didFinishDownloadingFromAPI()
                     FlickrCollectionViewCell.delegate?.cellLoadErrorOccured(errorMessage: errorMessage!)
                     return
                 }
                 
                 self?.photo.data = data
                 try? self?.photo.managedObjectContext?.save()
+                FlickrCollectionViewCell.delegate?.didFinishDownloadingFromAPI()
                 DispatchQueue.main.async {
                     self?.imageView.image = self?.photo.image!
                 }
@@ -43,9 +50,9 @@ class FlickrCollectionViewCell:UICollectionViewCell {
         } else {
             self.imageView.image = photo.image
         }
-        self.layer.cornerRadius = 20
+        self.layer.cornerRadius = 3
         self.layer.masksToBounds = true
-        self.layer.borderWidth = 1.5
+        self.layer.borderWidth = 0.25
         self.imageView.contentMode = .scaleAspectFill
         
         

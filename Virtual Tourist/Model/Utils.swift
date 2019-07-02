@@ -19,3 +19,32 @@ extension UIViewController {
         present(avc, animated: true)
     }
 }
+
+protocol NetworkCallingViewController  {
+    var activityIndicator : UIActivityIndicatorView { get }
+    
+    func showAcitivityIndicator()
+    func hideActivityIndicator()
+    
+}
+
+extension NetworkCallingViewController {
+    func showAcitivityIndicator() {
+        print("wait")
+        self.activityIndicator.hidesWhenStopped = true
+        self.activityIndicator.style = .gray
+        self.activityIndicator
+        DispatchQueue.main.async {
+            self.activityIndicator.startAnimating()
+        }
+        
+    }
+    
+    func hideActivityIndicator() {
+        print("done")
+        DispatchQueue.main.async {
+            self.activityIndicator.stopAnimating()
+        }
+        
+    }
+}

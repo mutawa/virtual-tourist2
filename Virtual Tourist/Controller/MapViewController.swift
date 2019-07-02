@@ -14,8 +14,12 @@ import CoreData
 class MapViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private var mapView:MKMapView!
     
+    var activityIndicatorView : UIActivityIndicatorView!
+    
     var dataController:DataController!
     var pins:[Pin] = []
+    var selectedAnnotation: FlickrAnnotation?
+    
     
     
     
@@ -31,6 +35,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         fr.sortDescriptors = [sd]
         do {
             pins = try dataController.context.fetch(fr)
+            
             self.loadPins()
         }
         catch {
@@ -40,8 +45,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         loadLocationAndZoom()
         
-        
-        
+        self.activityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        self.view.addSubview(self.activityIndicatorView)
         
     }
     
@@ -77,17 +82,17 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
             
             let cdpin = Pin(context: dataController.context)
-            let annotation = FlickrAnnotation(withCoordinate: coordinate, title: "loading...", subtitle: nil, pin: cdpin)
+            let annotation = FlickrAnnotation(withCoordinate: coordinate, title: "loading...", pin: cdpin)
             
             cdpin.latitude = coordinate.latitude
             cdpin.longitude = coordinate.longitude
             
             
-            
+            showAcitivityIndicator()
             
             FlickrAPI.shared.select(location: coordinate) { result,errorMessage in
                 guard let result = result else {
-                    
+                    self.hideActivityIndicator()
                     self.alert(title: "Can't select location", message: errorMessage ?? "--")
                     return }
                 
@@ -95,11 +100,9 @@ class MapViewController : UIViewController, MKMapViewDelegate {
                 let totalPhotos = min(50, Int(result.total) ?? 0)
                 
                 
-                annotation.setCount(totalPhotos)
                 cdpin.title = "\(totalPhotos) photos"
                 
-                cdpin.photosCount = Int64(totalPhotos)
-                print("setting count to \(totalPhotos)")
+                
                 
                 
                 for p in result.photo {
@@ -117,6 +120,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
                 
                 self.mapView.removeAnnotation(annotation)
                 self.mapView.addAnnotation(annotation)
+                self.hideActivityIndicator()
                 
             }
         }
@@ -138,18 +142,20 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         }
         let marker = pin as! MKMarkerAnnotationView
         
-        if a.cnt<0 {
+        let count = a.pin.photos?.count ?? -1
+        
+        if count < 0 {
             a.title = "loading..."
             marker.markerTintColor = .orange
             
-        } else if a.cnt == 0 {
+        } else if count == 0 {
             a.title = "no photos"
             marker.markerTintColor = .gray
         } else {
-            var countString = "\(a.cnt) photo"
+            var countString = "\(count) photo"
             
             
-            if a.cnt>1 {
+            if count>1 {
                 countString += "s"
             }
             
@@ -168,22 +174,24 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         // move to detail view controller
         let flickrAnnotation = view.annotation as! FlickrAnnotation
-        
-        
-        
-        
-        
+
         performSegue(withIdentifier: "details", sender: flickrAnnotation)
-        
-        
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        mapView.deselectAnnotation(selectedAnnotation, animated: true)
+        self.selectedAnnotation?.title = "\(self.selectedAnnotation?.pin.photos?.count ?? 0) photos"
         
         
     }
-    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let dvc = segue.destination as! DetailViewController
+        dvc.region = self.mapView.region
+        
         let annotation = sender as? FlickrAnnotation
         dvc.pin = annotation?.pin
+        self.selectedAnnotation = annotation
+        
         dvc.deletePinAction = { [weak self] in
             self?.mapView.removeAnnotation(annotation!)
             
@@ -196,14 +204,8 @@ class MapViewController : UIViewController, MKMapViewDelegate {
     
     func loadPins() {
         for pin in self.pins {
-            let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: pin.title, subtitle: nil, pin: pin)
-            
-            annotation.setCount(Int(pin.photosCount))
-            annotation.cnt = Int(pin.photosCount)
-            
-            
-            
-            
+            let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: nil, pin: pin)
+      
             mapView.addAnnotation(annotation)
         }
     }
@@ -212,18 +214,22 @@ class MapViewController : UIViewController, MKMapViewDelegate {
 class FlickrAnnotation:NSObject, MKAnnotation {
     var coordinate: CLLocationCoordinate2D
     var title: String?
-    var subtitle: String?
-    var cnt:Int = -1
     let pin:Pin
     
-    init(withCoordinate: CLLocationCoordinate2D, title: String?, subtitle: String? , pin: Pin) {
+    init(withCoordinate: CLLocationCoordinate2D, title:String?, pin: Pin) {
         self.coordinate = withCoordinate
         self.title = title
-        self.subtitle = subtitle
         self.pin = pin
     }
-    func setCount(_ count:Int) {
-        self.cnt = count
-        
+
+}
+
+extension MapViewController:NetworkCallingViewController {
+
+    
+    var activityIndicator: UIActivityIndicatorView {
+        return self.activityIndicatorView
     }
+
+    
 }

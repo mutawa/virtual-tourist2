@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import MapKit
 
 class DetailViewController:UIViewController , UICollectionViewDelegate, UICollectionViewDataSource {
     var allPhotos = [Photo]()
@@ -14,7 +15,10 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     var pin:Pin!
     var deletePinAction : (()->())?
     var didDisplayErrorMessageOnce = false
+    var region:MKCoordinateRegion!
+    var activityIndicatorView : UIActivityIndicatorView!
     
+    @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var loadMoreButton: UIButton!
     @IBOutlet weak var collectionView:UICollectionView!
     
@@ -24,22 +28,39 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         let width = min( view.frame.size.width, view.frame.size.height)
         let layout = collectionView.collectionViewLayout as! UICollectionViewFlowLayout
         
-        layout.itemSize = CGSize(width: (width-40-20)/3, height: (width-40-20)/3)
-        layout.minimumLineSpacing = 10
-        layout.minimumInteritemSpacing = 10
+        layout.itemSize = CGSize(width: (width)/3, height: (width)/3)
+        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
         
         allPhotos = pin.photos?.allObjects as! [Photo]
+        allPhotos.sort { return $0.id! < $1.id! }
+        
         FlickrCollectionViewCell.delegate = self
         
         addSection()
         
-        if photos.count > 0 && photos[0].count > 0 {
-            noPhotosLabel.isHidden = true
-        } else {
-            noPhotosLabel.isHidden = false
-        }
+        mapView.region = region
+        mapView.region.span.latitudeDelta *= 1.5
+        mapView.region.span.longitudeDelta *= 1.5
+        
+        mapView.isScrollEnabled = false
+        mapView.isZoomEnabled = false
         
         
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deletePinTapped))
+        
+        self.activityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
+        self.view.addSubview(self.activityIndicatorView)
+    }
+    
+    @objc func deletePinTapped() {
+        let context = pin.managedObjectContext
+        context?.delete(pin)
+        try? context?.save()
+        deletePinAction?()
+        
+        
+        navigationController?.popViewController(animated: true)
     }
     
     deinit {
@@ -49,9 +70,13 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        if photos.count > 0 && photos[0].count > 0 {
+            noPhotosLabel.isHidden = true
+        } else {
+            noPhotosLabel.isHidden = false
+        }
         
         
-
     }
     
     func numberOfSections(in collectionView: UICollectionView) -> Int {
@@ -72,44 +97,50 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     }
     
     @IBAction func loadMoreButtonTapped(_ sender: UIButton) {
-       
+        
         addSection()
         
     }
     
     func addSection() {
-        var count = 0
-        let total = allPhotos.count
-        for section in photos {
-            for _ in section {
-                count += 1
+        
+        if photos.count>0, photos[0].count>0 {
+            let context = self.pin.managedObjectContext
+            
+            for (_,photo) in photos[0].enumerated() {
+                
+                allPhotos.remove(at: 0)
+                context?.delete(photo)
             }
+            try? context?.save()
+            photos.remove(at: 0)
         }
         
-        if total > count {
-            // check if count+9 is within total
-            var countTo = count + 9
-            var numberOfItems = 0
+        
+        
+        let total = allPhotos.count
+        
+        
+        if total > 0 {
+            
+            var countTo = 9
+            
             if countTo >= total {
                 countTo = total
-                numberOfItems = total - count
+                
                 loadMoreButton.isHidden = true
             } else {
-                numberOfItems = 9
+                
                 loadMoreButton.isHidden = false
             }
             
-            let newSection = Array(allPhotos[count..<countTo])
+            photos.append(Array(allPhotos[0..<countTo]))
             
-            photos.append(newSection)
-            // todo: insertSections causes the app to crash
-            //       need to find a better way
-            // collectionView.insertSections(IndexSet(integer: collectionView.numberOfSections ))
             
-            // solution is expensive, but works for now
+            
             
             collectionView.reloadData()
-            collectionView.scrollToItem(at: IndexPath(item: numberOfItems-1, section: collectionView.numberOfSections-1), at: .bottom, animated: true)
+            //collectionView.scrollToItem(at: IndexPath(item: numberOfItems-1, section: collectionView.numberOfSections-1), at: .bottom, animated: true)
             
             
         }
@@ -118,33 +149,56 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         if let cell = collectionView.cellForItem(at: indexPath) as? FlickrCollectionViewCell {
-            performSegue(withIdentifier: "show image", sender: cell)
+            let dict:[String:Any] = ["cell" : cell, "indexPath" : indexPath]
+            performSegue(withIdentifier: "show image", sender: dict)
         }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "show image", let cell = sender as? FlickrCollectionViewCell {
+        if segue.identifier == "show image", let dict = sender as? [String:Any], let cell = dict["cell"] as? FlickrCollectionViewCell , let indexPath = dict["indexPath"] as? IndexPath {
+            
             if let ivc = segue.destination as? ImageViewController {
-                ivc.image = cell.imageView.image
                 
+                ivc.image = cell.imageView.image
+                ivc.deletePhotoAction = { [weak self] in
+                    
+                    
+                    self?.photos[indexPath.section].remove(at: indexPath.item)
+                    if var allPhotos = self?.allPhotos {
+                        for (index,photoToDelete) in allPhotos.enumerated() {
+                            if photoToDelete===cell.photo {
+                                allPhotos.remove(at: index)
+                                self?.pin.title = "\(allPhotos.count) photos"
+                                break
+                            }
+                        }
+                    }
+                    
+                    let context = self?.pin.managedObjectContext
+                    context?.delete(cell.photo)
+                    try? context?.save()
+                    
+                    
+                    self?.collectionView.reloadData()
+                }
             }
         }
+        
+        
     }
     
-    @IBAction func deleteButtonTapped(_ sender: UIButton) {
-        let context = pin.managedObjectContext
-        context?.delete(pin)
-        try? context?.save()
-        deletePinAction?()
-        
-        
-        navigationController?.popViewController(animated: true)
-        
-    }
     
 }
 
 extension DetailViewController:FlickrCollectionViewCellDelegate {
+    func didStartDownloadingFromAPI() {
+        showAcitivityIndicator()
+    }
+    
+    func didFinishDownloadingFromAPI() {
+        hideActivityIndicator()
+    }
+    
     func cellLoadErrorOccured(errorMessage: String) {
         if !didDisplayErrorMessageOnce {
             self.alert(title: "Could not load image", message: errorMessage)
@@ -152,6 +206,13 @@ extension DetailViewController:FlickrCollectionViewCellDelegate {
         }
         
     }
+
+}
+
+extension DetailViewController:NetworkCallingViewController {
+
     
-  
+    var activityIndicator: UIActivityIndicatorView {
+        return self.activityIndicatorView
+    }
 }
