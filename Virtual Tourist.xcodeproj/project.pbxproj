@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		E004E68322CB2C1500CF0846 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = E004E68222CB2C1500CF0846 /* Constants.swift */; };
 		E08043B622C4BC4500D0F81D /* ImageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = E08043B522C4BC4500D0F81D /* ImageViewController.swift */; };
 		E0DA72C622B822ED009A9C89 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = E0DA72C522B822ED009A9C89 /* AppDelegate.swift */; };
 		E0DA72CB22B822ED009A9C89 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E0DA72C922B822ED009A9C89 /* Main.storyboard */; };
@@ -25,6 +26,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		E004E68222CB2C1500CF0846 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		E08043B522C4BC4500D0F81D /* ImageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewController.swift; sourceTree = "<group>"; };
 		E0DA72C222B822ED009A9C89 /* Virtual Tourist.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Virtual Tourist.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		E0DA72C522B822ED009A9C89 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -87,6 +89,7 @@
 		E0DA72D722B82313009A9C89 /* Model */ = {
 			isa = PBXGroup;
 			children = (
+				E004E68222CB2C1500CF0846 /* Constants.swift */,
 				E0DA72E822BD514E009A9C89 /* Pin+Extra.swift */,
 				E0E6C7ED22C253F300EC03F0 /* Photo+Extra.swift */,
 				E0DA72E322BD4187009A9C89 /* FlickrModel.xcdatamodeld */,
@@ -209,6 +212,7 @@
 				E0E6C7EC22C24A1100EC03F0 /* FlickrCollectionViewCell.swift in Sources */,
 				E08043B622C4BC4500D0F81D /* ImageViewController.swift in Sources */,
 				E0E6C7EA22C2496200EC03F0 /* DetailViewController.swift in Sources */,
+				E004E68322CB2C1500CF0846 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

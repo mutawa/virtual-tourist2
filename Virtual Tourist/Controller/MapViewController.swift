@@ -38,8 +38,37 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         }
         
         
+        loadLocationAndZoom()
         
         
+        
+        
+    }
+    
+    
+    func saveCurrentLocationAndZoom() {
+        
+        UserDefaults.standard.set(mapView.region.center.latitude , forKey: Constants.centerLatitude)
+        UserDefaults.standard.set(mapView.region.center.longitude , forKey: Constants.centerLongitude)
+        UserDefaults.standard.set(mapView.region.span.latitudeDelta  , forKey: Constants.spanLatitude)
+        UserDefaults.standard.set(mapView.region.span.longitudeDelta , forKey: Constants.spanLongitude)
+    }
+    func loadLocationAndZoom() {
+        
+        if let centerLatitude = UserDefaults.standard.object(forKey: Constants.centerLatitude) as? Double,
+            let centerLongitude = UserDefaults.standard.object(forKey: Constants.centerLongitude) as? Double,
+            let spanLatitudeDelta = UserDefaults.standard.object(forKey: Constants.spanLatitude) as? Double,
+            let spanLongitudeDelta = UserDefaults.standard.object(forKey: Constants.spanLatitude) as? Double {
+            
+            let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
+            let span = MKCoordinateSpan(latitudeDelta: spanLatitudeDelta * 0.999, longitudeDelta: spanLongitudeDelta * 0.999)
+            let region = MKCoordinateRegion(center: center, span: span)
+            mapView.region = region
+            
+            
+            
+            
+        }
     }
     
     @objc func mapTapped(sender : UILongPressGestureRecognizer) {
@@ -54,7 +83,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             cdpin.longitude = coordinate.longitude
             
             
-
+            
             mapView.addAnnotation(annotation)
             FlickrAPI.shared.select(location: coordinate) { result in
                 print("got result count \(result.photo.count)")
@@ -66,7 +95,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
                 
                 cdpin.photosCount = Int64(totalPhotos)
                 print("setting count to \(totalPhotos)")
-
+                
                 
                 for p in result.photo {
                     let photo = Photo(context: self.dataController.context)
@@ -104,28 +133,28 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         }
         let marker = pin as! MKMarkerAnnotationView
         
-            if a.cnt<0 {
-                a.title = "loading..."
-                marker.markerTintColor = .orange
-                
-            } else if a.cnt == 0 {
-              a.title = "no photos"
-                marker.markerTintColor = .gray
-            } else {
-                var countString = "\(a.cnt) photo"
-                
-                
-                if a.cnt>1 {
-                    countString += "s"
-                }
-                
-                a.title = countString
-                marker.markerTintColor = .red
+        if a.cnt<0 {
+            a.title = "loading..."
+            marker.markerTintColor = .orange
+            
+        } else if a.cnt == 0 {
+            a.title = "no photos"
+            marker.markerTintColor = .gray
+        } else {
+            var countString = "\(a.cnt) photo"
+            
+            
+            if a.cnt>1 {
+                countString += "s"
             }
+            
+            a.title = countString
+            marker.markerTintColor = .red
+        }
         
         marker.canShowCallout = true
         marker.rightCalloutAccessoryView = UIButton(type: .infoDark)
-       
+        
         
         
         return marker
@@ -158,7 +187,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         
     }
-
+    
     
     func loadPins() {
         for pin in self.pins {
@@ -192,7 +221,7 @@ class FlickrAnnotation:NSObject, MKAnnotation {
         self.cnt = count
         
     }
-   
+    
     
     
 }
