@@ -10,13 +10,13 @@ import Foundation
 import MapKit
 
 class FlickrAnnotation:NSObject, MKAnnotation {
-    var coordinate: CLLocationCoordinate2D
+    var coordinate: CLLocationCoordinate2D {
+        return pin.coordinates
+    }
     var title: String?
     let pin:Pin
     
-    init(withCoordinate coordinate: CLLocationCoordinate2D, title:String?, pin: Pin) {
-        self.coordinate = coordinate
-        self.title = title
+    init(fromPin pin: Pin) {
         self.pin = pin
     }
     

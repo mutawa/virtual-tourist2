@@ -11,6 +11,22 @@ import MapKit
 
 extension Pin {
     var coordinates: CLLocationCoordinate2D {
-        return CLLocationCoordinate2D(latitude: self.latitude, longitude: self.longitude)
+        get {
+            return CLLocationCoordinate2D(latitude: self.latitude, longitude: self.longitude)
+        }
+        set {
+            self.latitude = newValue.latitude
+            self.longitude = newValue.longitude
+        }
     }
+    
+    var photoCountString:String {
+        guard let photos = photos else { return "..." }
+        
+        if photos.count == 0 { return "no photos" }
+        else {
+            return "\(photos.count) photo" + ((photos.count > 1) ? "s" : "")
+        }
+    }
+    
 }

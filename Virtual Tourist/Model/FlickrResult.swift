@@ -14,8 +14,11 @@ struct FlickrResult:Codable {
     let pages:Int
     let perpage:Int
     let total:String
-    let photo:[FlickrPhoto]
+    let photos:[FlickrPhoto]
     enum CodingKeys: String, CodingKey {
-        case page,pages,perpage,total,photo
+        // Flickr calls the array of photos just 'photo'
+        // and calls the result that encapsulates the array 'photos'
+        // so we need to change that on our end, and keep things as-is for Flickr
+        case page, pages, perpage, total, photos="photo"
     }
 }

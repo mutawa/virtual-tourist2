@@ -90,11 +90,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Virtual Tourist/Controller/MapViewController.swift"
-            timestampString = "583842279.296958"
+            timestampString = "583859240.051783"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "174"
-            endingLineNumber = "174"
+            startingLineNumber = "216"
+            endingLineNumber = "216"
             landmarkName = "mapView(_:viewFor:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -105,13 +105,29 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Virtual Tourist/Controller/MapViewController.swift"
-            timestampString = "583842279.29705"
+            filePath = "Virtual Tourist/Controller/PhotoAlbumViewController.swift"
+            timestampString = "583859240.05191"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "153"
-            endingLineNumber = "153"
-            landmarkName = "mapTapped(sender:)"
+            startingLineNumber = "186"
+            endingLineNumber = "186"
+            landmarkName = "loadNewCollection()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Virtual Tourist/Controller/PhotoAlbumViewController.swift"
+            timestampString = "583859240.052007"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "270"
+            endingLineNumber = "270"
+            landmarkName = "prepare(for:sender:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

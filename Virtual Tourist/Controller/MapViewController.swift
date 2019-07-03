@@ -96,60 +96,82 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             let spanLongitudeDelta = UserDefaults.standard.object(forKey: Constants.spanLatitude) as? Double {
             
             let center = CLLocationCoordinate2D(latitude: centerLatitude, longitude: centerLongitude)
-            let span = MKCoordinateSpan(latitudeDelta: spanLatitudeDelta * 0.999, longitudeDelta: spanLongitudeDelta * 0.999)
+            let span = MKCoordinateSpan(latitudeDelta: spanLatitudeDelta, longitudeDelta: spanLongitudeDelta)
             let region = MKCoordinateRegion(center: center, span: span)
-            mapView.region = region
-            
-            
-            
-            
+            mapView.setRegion(region, animated: false)
         }
     }
     
     @objc func mapTapped(sender : UILongPressGestureRecognizer) {
+        
+        // only trigger adding a pin if the gesture began, to avoid
+        // adding multiple pins on the same location
+        
         if sender.state == .began {
-            let location = sender.location(in: mapView)
-            let coordinate = mapView.convert(location, toCoordinateFrom: mapView)
+            let locationInMap = sender.location(in: mapView)
+            let coordinate = mapView.convert(locationInMap, toCoordinateFrom: mapView)
             
-            let cdpin = Pin(context: dataController.context)
-            let annotation = FlickrAnnotation(withCoordinate: coordinate, title: "loading...", pin: cdpin)
+            // create a new Pin object in CoreDate
+            let newPin = Pin(context: dataController.context)
+            newPin.coordinates = coordinate
             
-            cdpin.latitude = coordinate.latitude
-            cdpin.longitude = coordinate.longitude
-            
+            // create a new Annotation marker object and add it on the map
+            let annotation = FlickrAnnotation(fromPin: newPin)
             self.mapView.addAnnotation(annotation)
             
+            // since we are about to call the API, we better
+            // display the spinner activity indicator
             self.showActivityIndicator()
             
-            
             FlickrAPI.shared.select(location: coordinate) { result,errorMessage in
+                // we are back from the API call. let's first hide the spinner activity indicator
+                // before we do anything else
                 self.hideActivityIndicator()
-                cdpin.isLoading = false
                 
+                // newPin's isLoading property is TRUE by default,
+                // so it's time to set it to false
+                newPin.isLoading = false
+                
+                // check if we have a result from the API
                 guard let result = result else {
+                    // we don't. So let's remove the annotation that we added earlier
                     self.mapView.removeAnnotation(annotation)
+                    
+                    // and inform the user about it
                     self.alert(title: "Can't select location", message: errorMessage ?? "--")
-                    return }
-                
-                
-                let totalPhotos = min(50, Int(result.total) ?? 0)
-                
-                
-                cdpin.title = "\(totalPhotos) photos"
-                
-                
-                
-                
-                for p in result.photo {
-                    let photo = Photo(context: self.dataController.context)
-                    photo.pin = cdpin
-                    photo.urlString = p.url
-                    
-                    
+                    return
                 }
                 
-                try? self.dataController.context.save()
+                // ensure that we have less than or equal the maximum number of photos to pull from the API
+                let totalPhotos = min( Constants.maximumNumberOfPhotosToPull , Int(result.total) ?? 0)
                 
+                // update the newPin title
+                newPin.title = "\(totalPhotos) photos"
+                
+                
+                // iterate through all photo objects returned by the API
+                // NOTICE: the returned results only contains information that
+                //         will be used to construct URLs. No actual image data
+                //         is downloaded at this point. Only urls.
+                //         This is useful, if we need to limit traffic between
+                //         the view controller and the API.
+                //         Plus, we will make use of the count of image URLs obtained
+                for flickrPhoto in result.photos {
+                    // create a new Photo Object in CoreData
+                    let photo = Photo(context: self.dataController.context)
+                    
+                    // link it to the newly created Pin
+                    photo.pin = newPin
+                    
+                    // populate the photo object with the url obtained from the API
+                    photo.urlString = flickrPhoto.url
+                }
+                
+                // save CoreData context
+                self.saveContext()
+                
+                // for some reason, the title of the annotation will not be updated
+                // unless I remove the annotation and add it back again
                 self.mapView.removeAnnotation(annotation)
                 self.mapView.addAnnotation(annotation)
                 
@@ -159,104 +181,124 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
     }
     
+    func saveContext() {
+        // only save if there are changes in the context
+        if dataController.context.hasChanges {
+            do {
+                try self.dataController.context.save()
+            } catch {
+                alert(title: "Could not save", message: "An error occured while trying to save data. \(error.localizedDescription)")
+            }
+        }
+    }
+    
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        // ensure the annotation passed is a FlickrAnnotation
         guard annotation is FlickrAnnotation else { return nil }
         
-        let a = annotation as! FlickrAnnotation
-        
-        let identifier = "pin"
-        
-        var pin = mapView.dequeueReusableAnnotationView(withIdentifier: identifier)
+        let flickrAnnotation = annotation as! FlickrAnnotation
         
         
-        if pin == nil {
-            pin = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+        // first check if we can re-use an existing view
+        var reuseAnnotation = mapView.dequeueReusableAnnotationView(withIdentifier: Constants.FlickrAnnotationIdentifier)
+        
+        // if we can't then let's go ahead and create a new one
+        if reuseAnnotation == nil {
+            reuseAnnotation = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: Constants.FlickrAnnotationIdentifier)
+            reuseAnnotation?.canShowCallout = true
+            reuseAnnotation?.rightCalloutAccessoryView = UIButton(type: .infoLight)
         }
-        let marker = pin as! MKMarkerAnnotationView
         
-        if a.pin.isLoading {
-            a.title = "loading..."
-            marker.markerTintColor = .orange
+        // cast the re-use view to MarkerAnnotationView to access .rightCalloutAccessoryView
+        // and .markerTintColor
+        let annotationView = reuseAnnotation as! MKMarkerAnnotationView
+        
+        if flickrAnnotation.pin.isLoading {
+            // the pin is a new pin and a call to the API is in progress
+            flickrAnnotation.title = "loading..."
+            annotationView.markerTintColor = .orange
         } else {
-            let count = a.pin.photos!.count
+            // the pin is an existing pin
+            // we will check the count of photos objects it has
+            let count = flickrAnnotation.pin.photos!.count
             
             if count == 0 {
-                a.title = "no photos"
-                marker.markerTintColor = .gray
+                flickrAnnotation.title = "no photos"
+                annotationView.markerTintColor = .gray
+            } else if(count>0) {
+                // "1 photo", "2 photos", etc
+                let countString = "\(count) photo" + ( (count>1) ? "s" :  "")
+                
+                flickrAnnotation.title = countString
+                annotationView.markerTintColor = .red
             } else {
-                var countString = "\(count) photo"
-                
-                
-                if count>1 {
-                    countString += "s"
-                }
-                
-                a.title = countString
-                marker.markerTintColor = .red
+                // count can never be a negative value
+                fatalError("Invalid negative count for annotation")
             }
         }
         
-        
-      
-        
-        marker.canShowCallout = true
-        marker.rightCalloutAccessoryView = UIButton(type: .infoDark)
-        
-        
-        
-        return marker
+        return annotationView
         
     }
+    
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        // move to detail view controller
-        let flickrAnnotation = view.annotation as! FlickrAnnotation
-
-        performSegue(withIdentifier: "details", sender: flickrAnnotation)
+        // make sure the tapped annotation is of type FlickrAnnotation
+        guard let flickrAnnotation = view.annotation as? FlickrAnnotation else { return }
+        
+        // IT IS... move to PhotoAlbum view controller
+        performSegue(withIdentifier: Constants.photoAlbumSegueIdentifier , sender: flickrAnnotation)
     }
     
     override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        // de-select the previously selected annotation to hide its callout
         mapView.deselectAnnotation(selectedAnnotation, animated: true)
-        self.selectedAnnotation?.title = "\(self.selectedAnnotation?.pin.photos?.count ?? 0) photos"
         
-        
+        // update the title of the annotation since the user might have deleted some of its photos
+        self.selectedAnnotation?.title = selectedAnnotation?.pin.photoCountString
     }
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dvc = segue.destination as! PhotoAlbumViewController
-        dvc.region = self.mapView.region
+        // make sure the destination is a PhotoAlbum view Controller
+        guard let pavc = segue.destination as? PhotoAlbumViewController else { return }
+        guard let annotation = sender as? FlickrAnnotation else { return }
         
-        let annotation = sender as? FlickrAnnotation
-        dvc.pin = annotation?.pin
-        self.selectedAnnotation = annotation
+        // set it's properties
+        pavc.region = self.mapView.region
+        pavc.pin = annotation.pin
         
-        dvc.deletePinAction = { [weak self] in
-            self?.mapView.removeAnnotation(annotation!)
-            
+        // tell the next view controller what code to execute if the user
+        // decides to delete the entire pin
+        pavc.deleteAnnotationAction = { [weak self] in
+            self?.mapView.removeAnnotation(annotation)
         }
         
-        
-        
+        // keep a pointer to the selected annotation, in-case it's photos count
+        // changed (by the user) so that we may easily update its title
+        self.selectedAnnotation = annotation
     }
     
     
     func addExistingPinsToMap() {
         for pin in self.pins {
-            let annotation = FlickrAnnotation(withCoordinate: pin.coordinates, title: nil, pin: pin)
+            let annotation = FlickrAnnotation(fromPin: pin)
             mapView.addAnnotation(annotation)
         }
     }
     
     func showActivityIndicator() {
-        
         view.addSubview(spinner)
         spinner.startAnimating()
     }
+    
     func hideActivityIndicator() {
+        // make sure we are on the main DispatchQueue since we are affecting the UI
         DispatchQueue.main.async {
-        
-        self.spinner.stopAnimating()
-        self.spinner.removeFromSuperview()
+            self.spinner.stopAnimating()
+            self.spinner.removeFromSuperview()
         }
-        
+
     }
 }
 
