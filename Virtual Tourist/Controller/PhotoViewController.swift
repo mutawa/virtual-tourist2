@@ -1,5 +1,5 @@
 //
-//  ImageViewController.swift
+//  PhotoViewController.swift
 //  Virtual Tourist
 //
 //  Created by Ahmad Al-Mutawa on 27/06/2019.

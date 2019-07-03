@@ -1,5 +1,5 @@
 //
-//  DetailViewController.swift
+//  PhotoAlbumViewController.swift
 //  Virtual Tourist
 //
 //  Created by Ahmad Al-Mutawa on 25/06/2019.
@@ -33,7 +33,7 @@ class PhotoAlbumViewController:UIViewController , UICollectionViewDelegate, UICo
         layout.minimumInteritemSpacing = 0
         
         allPhotos = pin.photos?.allObjects as! [Photo]
-        allPhotos.sort { return $0.id! < $1.id! }
+        allPhotos.sort { return $0.urlString! < $1.urlString! }
         
         FlickrCollectionViewCell.delegate = self
         

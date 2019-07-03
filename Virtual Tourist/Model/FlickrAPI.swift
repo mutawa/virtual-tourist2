@@ -11,8 +11,8 @@ import MapKit
 
 
 class FlickrAPI {
-    private static let key = "03ad452ca7fc8e5b98cda18df0c68d7b"
-    private static let secret = "2c1ac02addba8a2f"
+    private static let key = Constants.FlickrApiKey
+    //private static let secret = "2c1ac02addba8a2f"
     
     
     private static var baseUrl:String {

@@ -10,31 +10,15 @@ import UIKit
 
 
 extension Photo {
-    private var url:String? {
-        guard let id = id else { return nil  }
-        guard let server = server else { return nil }
-        
-        var urlString = "https://farm\(farm).staticflickr.com/\(server)/\(id)"
-        if secret != nil {
-            urlString += "_\(secret!)"
-        }
-        urlString += ".jpg"
-        return urlString
-    }
     
     func load(completionHandler:@escaping (Data?,String?)->()) {
-        
-        
-        FlickrAPI.shared.loadImage(from: url) { data,errorMessage in
-                completionHandler(data,errorMessage)
-            
+    
+        FlickrAPI.shared.loadImage(from: urlString) { data,errorMessage in
+            completionHandler(data,errorMessage)
         }
-            
-        
     }
     
     var image:UIImage? {
-        
         guard let data=data else { return nil }
         return UIImage(data: data)
     }
