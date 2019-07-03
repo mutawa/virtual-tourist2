@@ -9,14 +9,14 @@
 import UIKit
 import MapKit
 
-class DetailViewController:UIViewController , UICollectionViewDelegate, UICollectionViewDataSource {
+class PhotoAlbumViewController:UIViewController , UICollectionViewDelegate, UICollectionViewDataSource {
     var allPhotos = [Photo]()
     var photos = [[Photo]]()
     var pin:Pin!
     var deletePinAction : (()->())?
     var didDisplayErrorMessageOnce = false
     var region:MKCoordinateRegion!
-    var activityIndicatorView : UIActivityIndicatorView!
+    
     
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var loadMoreButton: UIButton!
@@ -40,17 +40,22 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         addSection()
         
         mapView.region = region
-        mapView.region.span.latitudeDelta *= 1.5
-        mapView.region.span.longitudeDelta *= 1.5
+        mapView.region.span = MKCoordinateSpan(latitudeDelta: 9, longitudeDelta: 16)
+        
         
         mapView.isScrollEnabled = false
         mapView.isZoomEnabled = false
         
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = pin.coordinates
+        
+        mapView.addAnnotation(annotation)
+        mapView.setCenter(annotation.coordinate, animated: false)
+        
         
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deletePinTapped))
         
-        self.activityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        self.view.addSubview(self.activityIndicatorView)
+        
     }
     
     @objc func deletePinTapped() {
@@ -75,6 +80,9 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
         } else {
             noPhotosLabel.isHidden = false
         }
+        
+
+        
         
         
     }
@@ -157,7 +165,7 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "show image", let dict = sender as? [String:Any], let cell = dict["cell"] as? FlickrCollectionViewCell , let indexPath = dict["indexPath"] as? IndexPath {
             
-            if let ivc = segue.destination as? ImageViewController {
+            if let ivc = segue.destination as? PhotoViewController {
                 
                 ivc.image = cell.imageView.image
                 ivc.deletePhotoAction = { [weak self] in
@@ -190,14 +198,8 @@ class DetailViewController:UIViewController , UICollectionViewDelegate, UICollec
     
 }
 
-extension DetailViewController:FlickrCollectionViewCellDelegate {
-    func didStartDownloadingFromAPI() {
-        showAcitivityIndicator()
-    }
+extension PhotoAlbumViewController:FlickrCollectionViewCellDelegate {
     
-    func didFinishDownloadingFromAPI() {
-        hideActivityIndicator()
-    }
     
     func cellLoadErrorOccured(errorMessage: String) {
         if !didDisplayErrorMessageOnce {
@@ -207,12 +209,4 @@ extension DetailViewController:FlickrCollectionViewCellDelegate {
         
     }
 
-}
-
-extension DetailViewController:NetworkCallingViewController {
-
-    
-    var activityIndicator: UIActivityIndicatorView {
-        return self.activityIndicatorView
-    }
 }

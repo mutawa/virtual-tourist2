@@ -8,7 +8,7 @@
 
 import UIKit
 
-class ImageViewController: UIViewController {
+class PhotoViewController: UIViewController {
     var image:UIImage!
     var deletePhotoAction:(()->Void)!
     var photo:Photo!

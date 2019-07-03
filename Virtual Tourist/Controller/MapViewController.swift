@@ -14,7 +14,8 @@ import CoreData
 class MapViewController : UIViewController, MKMapViewDelegate {
     @IBOutlet private var mapView:MKMapView!
     
-    var activityIndicatorView : UIActivityIndicatorView!
+    
+    var spinner = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
     
     var dataController:DataController!
     var pins:[Pin] = []
@@ -45,9 +46,14 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
         loadLocationAndZoom()
         
-        self.activityIndicatorView = UIActivityIndicatorView(frame: CGRect(x: 0, y: 0, width: 50, height: 50))
-        self.view.addSubview(self.activityIndicatorView)
+        spinner.center = view.center
+        spinner.hidesWhenStopped = true
+        //spinner.startAnimating()
+        spinner.isOpaque = true
+        spinner.backgroundColor = #colorLiteral(red: 0.5741485357, green: 0.5741624236, blue: 0.574154973, alpha: 0.4626765839)
+        spinner.layer.cornerRadius = 5
         
+      
     }
     
     
@@ -87,16 +93,21 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             cdpin.latitude = coordinate.latitude
             cdpin.longitude = coordinate.longitude
             
+            self.mapView.addAnnotation(annotation)
             
-            showAcitivityIndicator()
+            self.showActivityIndicator()
+            
             
             FlickrAPI.shared.select(location: coordinate) { result,errorMessage in
+                self.hideActivityIndicator()
+                cdpin.isLoading = false
+                
                 guard let result = result else {
-                    self.hideActivityIndicator()
+                    self.mapView.removeAnnotation(annotation)
                     self.alert(title: "Can't select location", message: errorMessage ?? "--")
                     return }
                 
-                self.mapView.addAnnotation(annotation)
+                
                 let totalPhotos = min(50, Int(result.total) ?? 0)
                 
                 
@@ -120,7 +131,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
                 
                 self.mapView.removeAnnotation(annotation)
                 self.mapView.addAnnotation(annotation)
-                self.hideActivityIndicator()
+                
                 
             }
         }
@@ -142,26 +153,30 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         }
         let marker = pin as! MKMarkerAnnotationView
         
-        let count = a.pin.photos?.count ?? -1
-        
-        if count < 0 {
+        if a.pin.isLoading {
             a.title = "loading..."
             marker.markerTintColor = .orange
-            
-        } else if count == 0 {
-            a.title = "no photos"
-            marker.markerTintColor = .gray
         } else {
-            var countString = "\(count) photo"
+            let count = a.pin.photos!.count
             
-            
-            if count>1 {
-                countString += "s"
+            if count == 0 {
+                a.title = "no photos"
+                marker.markerTintColor = .gray
+            } else {
+                var countString = "\(count) photo"
+                
+                
+                if count>1 {
+                    countString += "s"
+                }
+                
+                a.title = countString
+                marker.markerTintColor = .red
             }
-            
-            a.title = countString
-            marker.markerTintColor = .red
         }
+        
+        
+      
         
         marker.canShowCallout = true
         marker.rightCalloutAccessoryView = UIButton(type: .infoDark)
@@ -185,7 +200,7 @@ class MapViewController : UIViewController, MKMapViewDelegate {
         
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let dvc = segue.destination as! DetailViewController
+        let dvc = segue.destination as! PhotoAlbumViewController
         dvc.region = self.mapView.region
         
         let annotation = sender as? FlickrAnnotation
@@ -209,6 +224,20 @@ class MapViewController : UIViewController, MKMapViewDelegate {
             mapView.addAnnotation(annotation)
         }
     }
+    
+    func showActivityIndicator() {
+        
+        view.addSubview(spinner)
+        spinner.startAnimating()
+    }
+    func hideActivityIndicator() {
+        DispatchQueue.main.async {
+        
+        self.spinner.stopAnimating()
+        self.spinner.removeFromSuperview()
+        }
+        
+    }
 }
 
 class FlickrAnnotation:NSObject, MKAnnotation {
@@ -216,20 +245,11 @@ class FlickrAnnotation:NSObject, MKAnnotation {
     var title: String?
     let pin:Pin
     
-    init(withCoordinate: CLLocationCoordinate2D, title:String?, pin: Pin) {
-        self.coordinate = withCoordinate
+    init(withCoordinate coordinate: CLLocationCoordinate2D, title:String?, pin: Pin) {
+        self.coordinate = coordinate
         self.title = title
         self.pin = pin
     }
-
-}
-
-extension MapViewController:NetworkCallingViewController {
-
     
-    var activityIndicator: UIActivityIndicatorView {
-        return self.activityIndicatorView
-    }
 
-    
 }

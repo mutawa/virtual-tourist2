@@ -9,6 +9,7 @@
         <relationship name="pin" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Pin" inverseName="photos" inverseEntity="Pin" syncable="YES"/>
     </entity>
     <entity name="Pin" representedClassName="Pin" syncable="YES" codeGenerationType="class">
+        <attribute name="isLoading" optional="YES" attributeType="Boolean" defaultValueString="YES" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="latitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="longitude" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
         <attribute name="title" optional="YES" attributeType="String" syncable="YES"/>
@@ -16,6 +17,6 @@
     </entity>
     <elements>
         <element name="Photo" positionX="-63" positionY="9" width="128" height="135"/>
-        <element name="Pin" positionX="-394.8984375" positionY="-37.9453125" width="128" height="105"/>
+        <element name="Pin" positionX="-394.8984375" positionY="-37.9453125" width="128" height="120"/>
     </elements>
 </model>
