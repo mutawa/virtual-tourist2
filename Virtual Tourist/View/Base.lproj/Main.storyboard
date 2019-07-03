@@ -49,7 +49,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="Xng-Ne-C9H">
-                                <rect key="frame" x="0.0" y="192" width="320" height="218"/>
+                                <rect key="frame" x="0.0" y="192" width="320" height="238"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="4" minimumInteritemSpacing="4" id="o8k-iV-7gP">
                                     <size key="itemSize" width="110" height="107"/>
@@ -99,9 +99,13 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WyE-Qd-VN1">
-                                <rect key="frame" x="20" y="430" width="280" height="30"/>
+                                <rect key="frame" x="0.0" y="430" width="320" height="50"/>
                                 <color key="backgroundColor" red="0.0" green="0.58980089430000004" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <state key="normal" title="Load a new Collection">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="50" id="jJa-vx-lsf"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <state key="normal" title="New Collection">
                                     <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </state>
                                 <connections>
@@ -113,14 +117,14 @@
                         <constraints>
                             <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="smo-hN-zws" secondAttribute="trailing" id="6Ze-Cx-zip"/>
                             <constraint firstItem="1pd-zP-qOz" firstAttribute="top" secondItem="tAm-RB-nHa" secondAttribute="top" constant="100" id="O2c-TC-6ht"/>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="WyE-Qd-VN1" secondAttribute="trailing" constant="20" id="STm-Kp-wrS"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="WyE-Qd-VN1" secondAttribute="trailing" id="STm-Kp-wrS"/>
                             <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="1pd-zP-qOz" secondAttribute="bottom" constant="100" id="T9s-mJ-aVd"/>
-                            <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="WyE-Qd-VN1" secondAttribute="bottom" constant="20" id="VJh-iH-b4G"/>
-                            <constraint firstItem="WyE-Qd-VN1" firstAttribute="top" secondItem="Xng-Ne-C9H" secondAttribute="bottom" constant="20" id="ZLQ-dG-AYv"/>
+                            <constraint firstItem="tAm-RB-nHa" firstAttribute="bottom" secondItem="WyE-Qd-VN1" secondAttribute="bottom" id="VJh-iH-b4G"/>
+                            <constraint firstItem="WyE-Qd-VN1" firstAttribute="top" secondItem="Xng-Ne-C9H" secondAttribute="bottom" id="ZLQ-dG-AYv"/>
                             <constraint firstItem="1pd-zP-qOz" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="40" id="bGu-Lh-If1"/>
                             <constraint firstItem="Xng-Ne-C9H" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" id="cWJ-f2-DAc"/>
                             <constraint firstItem="smo-hN-zws" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" id="gCq-Sm-gag"/>
-                            <constraint firstItem="WyE-Qd-VN1" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" constant="20" id="hOw-Xo-fZ7"/>
+                            <constraint firstItem="WyE-Qd-VN1" firstAttribute="leading" secondItem="tAm-RB-nHa" secondAttribute="leading" id="hOw-Xo-fZ7"/>
                             <constraint firstItem="tAm-RB-nHa" firstAttribute="trailing" secondItem="Xng-Ne-C9H" secondAttribute="trailing" id="iVH-tF-245"/>
                             <constraint firstItem="Xng-Ne-C9H" firstAttribute="top" secondItem="smo-hN-zws" secondAttribute="bottom" id="m4y-K1-bBz"/>
                             <constraint firstItem="smo-hN-zws" firstAttribute="top" secondItem="tAm-RB-nHa" secondAttribute="top" id="oSb-nv-4Xj"/>
@@ -175,7 +179,7 @@
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="CvW-Bl-5ta" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Icq-x0-8TK">
-                        <rect key="frame" x="0.0" y="20" width="320" height="50"/>
+                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
                     </navigationBar>
                     <nil name="viewControllers"/>

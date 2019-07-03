@@ -12,7 +12,8 @@ import UIKit
 extension Photo {
     
     func load(completionHandler:@escaping (Data?,String?)->()) {
-    
+        guard let urlString = urlString else { return }
+        
         FlickrAPI.shared.loadImage(from: urlString) { data,errorMessage in
             completionHandler(data,errorMessage)
         }

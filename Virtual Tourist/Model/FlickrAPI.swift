@@ -11,37 +11,47 @@ import MapKit
 
 
 class FlickrAPI {
-    private static let key = Constants.FlickrApiKey
-    //private static let secret = "2c1ac02addba8a2f"
-    
+    // Singlton desing pattern
+    public static let shared = FlickrAPI()
+    private init() {}
     
     private static var baseUrl:String {
         return
             "https://api.flickr.com/services/rest?"
                 + "method=flickr.photos.search"
-                + "&api_key=\(key)"
+                + "&api_key=\(Constants.FlickrApiKey)"
                 + "&format=json"
-                + "&per_page=50"
+                + "&per_page=\(Constants.maximumNumberOfPhotosToPull)"
         
     }
-    public static let shared = FlickrAPI()
     
-    private init() {}
     
+    
+    // this function will be called whenever the user taps on a new location on the map
     public func select(location:CLLocationCoordinate2D, completionHandler: ((FlickrResult?,String?)->Void)?=nil) {
+        // inject latitude and longitude parameters into the url
+        let urlString = FlickrAPI.baseUrl + "&lon=\(location.longitude)&lat=\(location.latitude)"
         
-        URLSession.shared.dataTask(with: URL(string: FlickrAPI.baseUrl + "&lon=\(location.longitude)&lat=\(location.latitude)")!) { data, resp, err in
+        // make sure it is a valid url
+        guard let url = URL(string: urlString) else { return }
+        
+        URLSession.shared.dataTask(with: url) { data, resp, err in
+            // check if there were any errors
             guard err == nil else {
                 completionHandler?(nil,err?.localizedDescription)
                 return
-                
             }
+            
+            // check if data is received
             guard let data=data else {
                 completionHandler?(nil,"No data retrieved from API")
                 return
                 
             }
+            
             let decoder = JSONDecoder()
+            
+            // skip the first 14 characters, and remove the last character
             let sData = data.subdata(in: 14..<data.count-1)
             
             do {
@@ -50,11 +60,7 @@ class FlickrAPI {
                 DispatchQueue.main.async {
                     completionHandler?(reply.result,nil)
                 }
-                
-                
-                
             } catch {
-                
                 completionHandler?(nil,"Error while trying to parse recieved data. \(err?.localizedDescription ?? "")")
             }
             
@@ -63,10 +69,9 @@ class FlickrAPI {
         
     }
     
-    public func loadImage(from urlString:String?, completionHandler: ((Data?,String?)->())? = nil) {
-        
-        guard let urlString = urlString else { return }
-        
+    
+    // this function will be called by the Custom Cells in the PhotoAlbum View controller to load each image
+    public func loadImage(from urlString:String, completionHandler: ((Data?,String?)->())? = nil) {
         
         URLSession.shared.dataTask(with: URL(string: urlString)!) { imgdata, resp, err in
             guard err == nil else {
@@ -74,7 +79,7 @@ class FlickrAPI {
                 return
                 
             }
-            
+        
             if let data = imgdata {
                 
                 completionHandler?(data,nil)
