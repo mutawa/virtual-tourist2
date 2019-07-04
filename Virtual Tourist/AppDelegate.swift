@@ -13,8 +13,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    // TODO: remove the constant "FlickrModel" to the Constants global object
-    let dataController = DataController(modelName: "FlickrModel")
+    let dataController = DataController(modelName: Constants.modelName )
 
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {

@@ -27,6 +27,7 @@ struct Constants {
     static let zoomLongitudeDelta = 16.0
     
     // For use in CoreData FetchRequest SortDescriptor
+    static let modelName = "FlickrModel"
     static let sortPinsBy = "title"
     
     // Re-use identifiers
